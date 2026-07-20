@@ -1,0 +1,8 @@
+{
+    // Cloudflare Pages project config for graph.john-cao.com
+    // Deploy from the CLI with:   npx wrangler pages deploy
+    // (build first with:          npm run build  -> outputs to dist/ )
+    "name": "graph-john-cao",
+    "compatibility_date": "2026-07-20",
+    "pages_build_output_dir": "dist"
+}

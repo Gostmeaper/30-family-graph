@@ -1,108 +1,12 @@
 import ForceGraph3D from '3d-force-graph';
 import * as THREE from 'three';
-import "./style.css"
+import { data, type GraphNode } from './data';
+import "./style.css";
 
-interface NodeType {
-    gen?: number;
-    id?: string | number;
-}
-
-const data = {
-    nodes: [
-        { gen: 1, id: "julia" },
-        { gen: 1, id: "lee" },
-        { gen: 1, id: "anish" },
-        { gen: 1, id: "izzy" },
-        { gen: 1, id: "ash" },
-        { gen: 1, id: "emma" },
-        { gen: 2, id: "vivek" },
-        { gen: 2, id: "li" },
-        { gen: 2, id: "katherine" },
-        { gen: 2, id: "max" },
-        { gen: 2, id: "andy" },
-        { gen: 2, id: "andrew" },
-        { gen: 2, id: "charles" },
-        { gen: 2, id: "anish jr" },
-        { gen: 2, id: "pius" },
-        { gen: 2, id: "violet" },
-        { gen: 2, id: "vidur" },
-        { gen: 2, id: "mithun" },
-        { gen: 2, id: "ivory" },
-        { gen: 2, id: "yusuf" },
-        { gen: 2, id: "aiden" },
-        { gen: 2, id: "jesse" },
-        { gen: 2, id: "vincent" },
-        { gen: 2, id: "yue" },
-        { gen: 2, id: "kaitlyn" },
-        { gen: 2, id: "justin" },
-        { gen: 2, id: "edward" },
-        { gen: 2, id: "steven" },
-        { gen: 2, id: "amy" },
-        { gen: 2, id: "faisal" },
-        { gen: 2, id: "eddie" },
-        { gen: 2, id: "keeler" },
-        { gen: 2, id: "mik" }
-    ],
-    links: [
-        // imps
-        { source: "anish", target: "vivek", family: "imps" },
-        { source: "anish", target: "li", family: "imps" },
-        { source: "anish", target: "katherine", family: "imps" },
-        { source: "anish", target: "max", family: "imps" },
-        { source: "anish", target: "andy", family: "imps" },
-        { source: "anish", target: "andrew", family: "imps" },
-        { source: "anish", target: "charles", family: "imps" },
-        { source: "anish", target: "anish jr", family: "imps" },
-        { source: "anish", target: "pius", family: "imps" },
-        { source: "anish", target: "violet", family: "imps" },
-        { source: "anish", target: "vidur", family: "imps" },
-        { source: "anish", target: "mithun", family: "imps" },
-        { source: "anish", target: "ivory", family: "imps" },
-        { source: "anish", target: "yusuf", family: "imps" },
-
-        // izzy's icees
-        { source: "izzy", target: "ivory", family: "icees" },
-        { source: "izzy", target: "aiden", family: "icees" },
-        { source: "izzy", target: "jesse", family: "icees" },
-        { source: "izzy", target: "vincent", family: "icees" },
-        { source: "izzy", target: "andrew", family: "icees" },
-        { source: "izzy", target: "yue", family: "icees" },
-        { source: "izzy", target: "kaitlyn", family: "icees" },
-        { source: "izzy", target: "justin", family: "icees" },
-
-        // ashlings
-        { source: "ash", target: "aiden", family: "ashlings" },
-        { source: "ash", target: "jesse", family: "ashlings" },
-        { source: "ash", target: "edward", family: "ashlings" },
-        { source: "ash", target: "steven", family: "ashlings" },
-        { source: "ash", target: "max", family: "ashlings" },
-        { source: "ash", target: "violet", family: "ashlings" },
-
-        // lee's leafs
-        { source: "lee", target: "li", family: "leafs" },
-        { source: "lee", target: "katherine", family: "leafs" },
-        { source: "lee", target: "amy", family: "leafs" },
-        { source: "lee", target: "max", family: "leafs" },
-        { source: "lee", target: "faisal", family: "leafs" },
-        { source: "lee", target: "jesse", family: "leafs" },
-        { source: "lee", target: "izzy", family: "leafs" },
-
-        // julia's icecreams
-        { source: "julia", target: "eddie", family: "icecream" },
-        { source: "julia", target: "aiden", family: "icecream" },
-        { source: "julia", target: "katherine", family: "icecream" },
-        { source: "julia", target: "jesse", family: "icecream" },
-        { source: "julia", target: "kaitlyn", family: "icecream" },
-        { source: "julia", target: "keeler", family: "icecream" },
-        { source: "julia", target: "mik", family: "icecream" },
-        { source: "julia", target: "ivory", family: "icecream" },
-
-        // mochis
-        { source: "emma", target: "eddie", family: "mochis" },
-        { source: "emma", target: "aiden", family: "mochis" },
-        { source: "emma", target: "jesse", family: "mochis" },
-    ]
-};
+// ----------------------------------------------------------------------------
+//  To change WHO is in the graph and how they connect, edit src/data.ts.
+//  This file only handles rendering / camera / interaction.
+// ----------------------------------------------------------------------------
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -145,6 +49,14 @@ const createStarfield = () => {
 
 const circularMask = createCircularMask();
 
+// Resolve a node's picture: use `img` if given, else /public/<id>.png
+const imageFor = (node: GraphNode) =>
+    node.img ?? `/${node.id}.png`;
+
+// The graph library passes a looser node type to its callbacks; our data is
+// always GraphNode-shaped, so we narrow it here.
+const asNode = (node: object) => node as GraphNode;
+
 const graph = new ForceGraph3D(document.querySelector('body')!)
     .graphData(data)
     .nodeLabel("id")
@@ -154,10 +66,16 @@ const graph = new ForceGraph3D(document.querySelector('body')!)
     .linkWidth(1)
     .linkOpacity(0.5)
     .linkResolution(6)
-    .nodeThreeObject((node: NodeType) => {
-        const id = typeof node.id === "string" ? node.id : String(node.id);
-
-        const texture = textureLoader.load(`/${id}.png`);
+    // Clicking a node with a `url` in data.ts opens that link in a new tab.
+    .onNodeClick((node: object) => {
+        const { url } = asNode(node);
+        if (url) {
+            window.open(url, "_blank", "noopener");
+        }
+    })
+    .nodeThreeObject((rawNode: object) => {
+        const node = asNode(rawNode);
+        const texture = textureLoader.load(imageFor(node));
         const material = new THREE.SpriteMaterial({
             map: texture,
             alphaMap: circularMask,
