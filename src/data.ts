@@ -97,6 +97,7 @@ export const data: GraphData = {
         { gen: 2, id: "Aiden Z", img: "/prospieaiden.png" },
         { gen: 2, id: "Peter", img: "/peter.png" },
         { gen: 2, id: "Sashvat", img: "/sashvat.png" },
+        { gen: 2, id: "Sushrut", img: "/sushrut.png" },
         { gen: 2, id: "Vehd", img: "/vehd.png" },
         { gen: 2, id: "Vincent", img: "/vincent.png" },
         { gen: 2, id: "Xan", img: "/xan.png" },
@@ -130,7 +131,7 @@ export const data: GraphData = {
 
         // Jellyfish
         { source: "Rin", target: "Angela", family: "Jellyfish" },
-        { source: "Rin", target: "Jacqueline", family: "Jellyfish" },
+        { source: "Rin", target: "Jacueline", family: "Jellyfish" },
         { source: "Rin", target: "Kai", family: "Jellyfish" },
         { source: "Rin", target: "Katelyn", family: "Jellyfish" },
         { source: "Rin", target: "Vehd", family: "Jellyfish" },
