@@ -95,7 +95,7 @@ export const data: GraphData = {
         { gen: 2, id: "Nikhil", img: "/nikhil.png" },
         { gen: 2, id: "Olivia", img: "/olivia.png" },
         { gen: 2, id: "Sushrut", img: "/sushrut.png" },
-        { gen: 2, id: "Aiden Z", img: "/prospieaiden.png" },
+        { gen: 2, id: "A Zhou", img: "/prospieaiden.png" },
         { gen: 2, id: "Peter", img: "/peter.png" },
         { gen: 2, id: "Sashvat", img: "/sashvat.png" },
         { gen: 2, id: "Vehd", img: "/vehd.png" },
@@ -146,7 +146,7 @@ export const data: GraphData = {
         { source: "Katherine", target: "Vehd", family: "Katherine's Stars :)" },
 
         // Turning's Violet Turnips
-        { source: "Violet", target: "Aiden Z", family: "Turning's Violet Turnips" },
+        { source: "Violet", target: "A Zhou", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Alex", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Caf", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Darren", family: "Turning's Violet Turnips" },

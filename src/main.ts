@@ -104,7 +104,9 @@ let angle = 0;
 const rotationSpeed = 0.001;
 
 let isUserInteracting = false;
-let interactionTimeout: number;
+// ReturnType<typeof setTimeout> works whether the DOM (number) or Node
+// (Timeout) type definitions are in scope.
+let interactionTimeout: ReturnType<typeof setTimeout>;
 
 const getCurrentAngleFromCamera = () => {
     const cameraPos = graph.cameraPosition();
