@@ -69,7 +69,9 @@ export const familyColors: Record<string, string> = {
     "Turning's Violet Turnips": "#7F00FF",
     "Katherine's Stars :)": "#FFEF00",
     "Rosebuds": "#FF0080",
-    "Prismatic Pearls": "#FFFFFF"
+    "Prismatic Pearls": "#FFFFFF",
+    "Jessebeans!": "#008000",
+    "Jellyfish": "#0000FF"
 };
 
 // ----------------------------------------------------------------------------
