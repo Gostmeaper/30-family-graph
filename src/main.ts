@@ -1,6 +1,6 @@
 import ForceGraph3D from '3d-force-graph';
 import * as THREE from 'three';
-import { data, type GraphNode } from './data';
+import { data, familyColors, type GraphNode, type GraphLink } from './data';
 import "./style.css";
 
 // ----------------------------------------------------------------------------
@@ -53,15 +53,43 @@ const circularMask = createCircularMask();
 const imageFor = (node: GraphNode) =>
     node.img ?? `/${node.id}.png`;
 
-// The graph library passes a looser node type to its callbacks; our data is
-// always GraphNode-shaped, so we narrow it here.
+// The graph library passes a looser node/link type to its callbacks; our
+// data is always GraphNode/GraphLink-shaped, so we narrow it here.
 const asNode = (node: object) => node as GraphNode;
+const asLink = (link: object) => link as GraphLink;
+
+// Automatic fallback colors, one per unique `family` value that isn't
+// listed in `familyColors` (data.ts).
+const autoFamilyColor = (() => {
+    const palette = [
+        '#e6194b', '#3cb44b', '#4363d8', '#f58231', '#911eb4',
+        '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080',
+    ];
+    const assigned = new Map<string, string>();
+    return (family: string) => {
+        if (!assigned.has(family)) {
+            assigned.set(family, palette[assigned.size % palette.length]);
+        }
+        return assigned.get(family)!;
+    };
+})();
+
+// Pick a link's color, in order of priority:
+//   1. `color` set directly on that link in data.ts
+//   2. `familyColors[link.family]` set in data.ts
+//   3. an automatic color shared by all links with the same `family`
+const colorForLink = (rawLink: object) => {
+    const link = asLink(rawLink);
+    if (link.color) return link.color;
+    if (!link.family) return '#ffffff';
+    return familyColors[link.family] ?? autoFamilyColor(link.family);
+};
 
 const graph = new ForceGraph3D(document.querySelector('body')!)
     .graphData(data)
     .nodeLabel("id")
     .nodeAutoColorBy("gen")
-    .linkAutoColorBy("family")
+    .linkColor(colorForLink)
     .linkLabel("family")
     .linkWidth(1)
     .linkOpacity(0.5)

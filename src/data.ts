@@ -45,6 +45,11 @@ export interface GraphLink {
     target: string;
     /** Optional label/group for the relationship. Links are colored by this. */
     family?: string;
+    /**
+     * Optional. Set a specific color for this link, e.g. "#ff6600" or "red".
+     * Overrides the automatic per-family color for just this connection.
+     */
+    color?: string;
 }
 
 export interface GraphData {
@@ -53,8 +58,22 @@ export interface GraphData {
 }
 
 // ----------------------------------------------------------------------------
-//  YOUR DATA
+//  FAMILY COLORS
 //
+//  Give a family group its own color by adding it here, keyed by the exact
+//  `family` string used in `links` below, e.g. "#ff69b4" or "hotpink".
+//  Any family left out just gets an automatic color instead.
+// ----------------------------------------------------------------------------
+
+export const familyColors: Record<string, string> = {
+    "Turning's Violet Turnips": "#7F00FF",
+    "Katherine's Stars :)": "#FFEF00",
+    "Rosebuds": "#FF0080"
+};
+
+// ----------------------------------------------------------------------------
+//  YOUR DATA
+//nn
 //  Below is the original "29" family graph, kept as a working example so the
 //  app runs out of the box. Replace the people and links with your own.
 //  Delete what you don't need — just keep the { nodes: [...], links: [...] }
