@@ -68,7 +68,8 @@ export interface GraphData {
 export const familyColors: Record<string, string> = {
     "Turning's Violet Turnips": "#7F00FF",
     "Katherine's Stars :)": "#FFEF00",
-    "Rosebuds": "#FF0080"
+    "Rosebuds": "#FF0080",
+    "Prismatic Pearls": "#FFFFFF"
 };
 
 // ----------------------------------------------------------------------------
