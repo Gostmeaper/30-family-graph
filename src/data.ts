@@ -125,6 +125,7 @@ export const data: GraphData = {
         { gen: 2, id: "Xan", img: "/xan.png" },
         { gen: 2, id: "Yujie", img: "/yujie.png" },
         { gen: 2, id: "Zoe", img: "/zoe.png" },
+        { gen: 2, id: "Lemon", img: "/lemon.png" },
     ],
     links: [
         // Tentype's Prismatic Pearls
@@ -176,5 +177,6 @@ export const data: GraphData = {
         { source: "Violet", target: "Maverick", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Olivia", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Sashvat", family: "Turning's Violet Turnips" },
+        { source: "Violet", target: "Lemon", family: "Turning's Violet Turnips" },
     ]
 };
