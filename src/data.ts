@@ -85,6 +85,18 @@ export const familyColors: Record<string, string> = {
 
 export const data: GraphData = {
     nodes: [
+        // gen 0 = grandparents — the family heads from the original "29" graph.
+        // Only the ones who had a gen-1 person from this graph as their "little"
+        // are included. Rin was "Eddie" in the old graph (name changed since).
+        // John and Bright have no gen-0 parent in the old graph, so they simply
+        // have no gen-0 link.
+        { gen: 0, id: "Anish", img: "/anish.png" },
+        { gen: 0, id: "Ash", img: "/ash.png" },
+        { gen: 0, id: "Emma", img: "/emma.png" },
+        { gen: 0, id: "Izzy", img: "/izzy.png" },
+        { gen: 0, id: "Julia", img: "/julia.png" },
+        { gen: 0, id: "Lee", img: "/lee.png" },
+
         // gen 1 = the "family heads" (drawn larger)
         { gen: 1, id: "John", img: "/john.png" },
         { gen: 1, id: "Katherine", img: "/katherine.png" },
@@ -128,6 +140,37 @@ export const data: GraphData = {
         { gen: 2, id: "Lemon", img: "/lemon.png" },
     ],
     links: [
+        // gen 0 -> gen 1: carried over from the original "29" graph's
+        // gen1 -> gen2 links, keeping only the ones that point at someone
+        // who is a gen-1 family head in this graph.
+        { source: "Anish", target: "Katherine", family: "imps" },
+        { source: "Anish", target: "Max", family: "imps" },
+        { source: "Anish", target: "Violet", family: "imps" },
+
+        { source: "Izzy", target: "Aiden", family: "icees" },
+        { source: "Izzy", target: "Jesse", family: "icees" },
+        { source: "Izzy", target: "Kaitlyn", family: "icees" },
+
+        { source: "Ash", target: "Aiden", family: "ashlings" },
+        { source: "Ash", target: "Jesse", family: "ashlings" },
+        { source: "Ash", target: "Max", family: "ashlings" },
+        { source: "Ash", target: "Violet", family: "ashlings" },
+
+        { source: "Lee", target: "Katherine", family: "leafs" },
+        { source: "Lee", target: "Amy", family: "leafs" },
+        { source: "Lee", target: "Max", family: "leafs" },
+        { source: "Lee", target: "Jesse", family: "leafs" },
+
+        { source: "Julia", target: "Aiden", family: "icecream" },
+        { source: "Julia", target: "Katherine", family: "icecream" },
+        { source: "Julia", target: "Jesse", family: "icecream" },
+        { source: "Julia", target: "Kaitlyn", family: "icecream" },
+        { source: "Julia", target: "Rin", family: "icecream" }, // Rin = Eddie (name changed)
+
+        { source: "Emma", target: "Aiden", family: "mochis" },
+        { source: "Emma", target: "Jesse", family: "mochis" },
+        { source: "Emma", target: "Rin", family: "mochis" }, // Rin = Eddie (name changed)
+
         // Tentype's Prismatic Pearls
         { source: "Max", target: "Anissa", family: "Prismatic Pearls" },
         { source: "Max", target: "Manraj", family: "Prismatic Pearls" },

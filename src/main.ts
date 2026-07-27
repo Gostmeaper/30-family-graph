@@ -58,6 +58,35 @@ const imageFor = (node: GraphNode) =>
 const asNode = (node: object) => node as GraphNode;
 const asLink = (link: object) => link as GraphLink;
 
+// ----------------------------------------------------------------------------
+//  Grandparents toggle (gen 0)
+//
+//  Node objects are reused as-is across toggles so the force layout keeps
+//  their position instead of re-simulating from scratch. Links are rebuilt
+//  from a pristine copy each time (the graph library mutates link.source /
+//  link.target into node references, so we never hand it the same link
+//  object twice).
+// ----------------------------------------------------------------------------
+
+const grandparentIds = new Set(
+    data.nodes.filter((n) => n.gen === 0).map((n) => n.id)
+);
+const allNodes = data.nodes;
+const baselineLinks = data.links.map((l) => ({ ...l }));
+
+const buildGraphData = (includeGrandparents: boolean) => ({
+    nodes: includeGrandparents
+        ? allNodes
+        : allNodes.filter((n) => n.gen !== 0),
+    links: baselineLinks
+        .filter(
+            (l) =>
+                includeGrandparents ||
+                (!grandparentIds.has(l.source) && !grandparentIds.has(l.target))
+        )
+        .map((l) => ({ ...l })),
+});
+
 // Automatic fallback colors, one per unique `family` value that isn't
 // listed in `familyColors` (data.ts).
 const autoFamilyColor = (() => {
@@ -85,8 +114,10 @@ const colorForLink = (rawLink: object) => {
     return familyColors[link.family] ?? autoFamilyColor(link.family);
 };
 
+let showGrandparents = false;
+
 const graph = new ForceGraph3D(document.querySelector('body')!)
-    .graphData(data)
+    .graphData(buildGraphData(showGrandparents))
     .nodeLabel("id")
     .nodeAutoColorBy("gen")
     .linkColor(colorForLink)
@@ -114,16 +145,49 @@ const graph = new ForceGraph3D(document.querySelector('body')!)
         });
 
         const sprite = new THREE.Sprite(material);
-        const scale = node.gen === 1 ? 18 : 12;
+        const scale = node.gen === 0 ? 24 : node.gen === 1 ? 18 : 12;
         sprite.scale.set(scale, scale, 1);
         sprite.renderOrder = 100000; // render over links
 
         return sprite;
     })
-    .nodeThreeObjectExtend(true); // enables custom objects
+    .nodeThreeObjectExtend(true) // enables custom objects
+    // Pre-run the physics before the first frame paints (and again on every
+    // toggle) so the graph never shows its tightly-clumped starting position —
+    // without this, a slow/throttled tab can sit clumped for a while before
+    // the animation loop has a chance to spread things out.
+    .warmupTicks(100);
 
 const starfield = createStarfield();
 graph.scene().add(starfield);
+
+// Grandparents (gen 0) sit a bit farther out on their links than everyone
+// else, to read as their own outer ring rather than blending into gen 1.
+const DEFAULT_LINK_DISTANCE = 30; // d3-force's own default
+const GRANDPARENT_LINK_DISTANCE = 55;
+const linkForce = graph.d3Force('link');
+if (linkForce && typeof linkForce.distance === 'function') {
+    linkForce.distance((link: any) => {
+        const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+        const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+        return grandparentIds.has(sourceId) || grandparentIds.has(targetId)
+            ? GRANDPARENT_LINK_DISTANCE
+            : DEFAULT_LINK_DISTANCE;
+    });
+}
+
+// Top-right button to show/hide gen-0 (grandparents). Hidden by default.
+const grandparentToggle = document.createElement('button');
+grandparentToggle.id = 'grandparent-toggle';
+grandparentToggle.textContent = 'Show Grandparents';
+grandparentToggle.addEventListener('click', () => {
+    showGrandparents = !showGrandparents;
+    graph.graphData(buildGraphData(showGrandparents));
+    grandparentToggle.textContent = showGrandparents
+        ? 'Hide Grandparents'
+        : 'Show Grandparents';
+});
+document.body.appendChild(grandparentToggle);
 
 const initialDistance = 300;
 graph.cameraPosition({ x: initialDistance, y: 0, z: 0 });
