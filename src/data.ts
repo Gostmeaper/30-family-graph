@@ -179,6 +179,7 @@ export const data: GraphData = {
         { source: "Max", target: "Peter", family: "Prismatic Pearls" },
         { source: "Max", target: "Vehd", family: "Prismatic Pearls" },
         { source: "Max", target: "Vincent", family: "Prismatic Pearls" },
+        { source: "Max", target: "Jessie", family: "Prismatic Pearls" },
 
         // Jessebeans!
         { source: "Jesse", target: "Anissa", family: "Jessebeans!" },
@@ -186,6 +187,7 @@ export const data: GraphData = {
         { source: "Jesse", target: "Kai", family: "Jessebeans!" },
         { source: "Jesse", target: "Olivia", family: "Jessebeans!" },
         { source: "Jesse", target: "Vehd", family: "Jessebeans!" },
+        { source: "Jesse", target: "Jessie", family: "Jessebeans!" },
 
         // Rosebuds
         { source: "John", target: "Emily", family: "Rosebuds" },
@@ -221,5 +223,9 @@ export const data: GraphData = {
         { source: "Violet", target: "Olivia", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Sashvat", family: "Turning's Violet Turnips" },
         { source: "Violet", target: "Lemon", family: "Turning's Violet Turnips" },
+
+        // Yam's Potatoes
+        { source: "Amy", target: "Jessie", family: "Yam's Potatoes" },
+        { source: "Amy", target: "Olivia", family: "Yam's Potatoes" },
     ]
 };
